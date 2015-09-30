@@ -136,11 +136,15 @@ dic = {
 "you’ve":"you have"
 }
 
-def replace_contraction(s):
+def normalize(s):
 	for x in dic.keys():
 		s=s.replace(x,dic[x])
-	s=re.sub(r'[^a-zA-Z\d\s:]', '', s)
+	#print(type(s))
+	s=s.replace("'s",'')
+	s=re.sub(r'[,\(\)\[\]\{\}]',' ',s)
+	s=re.sub(r'[^a-zA-Z\d\s\.]', '', s)
 	return s
+
 if __name__ == '__main__':
 	with open('./reddit_data/technology.txt') as data_file:    
 		count=0
