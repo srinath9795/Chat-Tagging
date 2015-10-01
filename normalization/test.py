@@ -2,9 +2,10 @@ from collections import defaultdict
 import MySQLdb as mdb
 import time
 from nltk.corpus import stopwords
+from nltk.corpus import words
+from nltk import word_tokenize
 
-
-con=mdb.connect('localhost','root','pass','sms')
+con=mdb.connect('localhost','root','mandava','sms')
 cur=con.cursor()
 
 def permute(p,l,m,r=None):
@@ -90,7 +91,7 @@ def probw(a,b,data):
 	a='$'+a+'$'
 	b='$'+b+'$'
 	arr_list=getindices(len(a)-1,len(b)-1)
-	ret=None
+	# ret=None
 
 	mpr=0
 	for arr in arr_list:
@@ -121,24 +122,39 @@ def learn(rows):
 # print d['$to']
 
 cur.execute("select * from norm")
-
-d=learn(cur.fetchall())
-
-
-
-
+b=cur.fetchall()
+d=learn(b)
+translationMap = {}
+vocab = {}
+for a in b:
+	translationMap[a[0]]=a[1]
+	vocab[a[1]]=1
+vocab=vocab.keys()
+englishVocab = words.words()
 
 stop=stopwords.words('english')
-stop.append('awesome')
-wp=list()
-for word in stop:
-	r=probw('awsum',word,d)
-	wp.append((word,r))
+
+def normalize(sms):
+	tokens = word_tokenize(sms)
+	# print tokens
+	translated = []
+	for token in tokens:
+		if token in translationMap:
+			translated.append(translationMap[token])
+		elif token in englishVocab:
+			translated.append(token)
+		else:
+			wp=list()
+			for word in vocab:
+				r=probw(token,word,d)
+				wp.append((word,r))
+			wp=sorted(wp,key=lambda x: x[1])
+			translated.append(wp[-1][0])
+	return ' '.join(translated)
+print 'asd'
+print normalize(raw_input())
 
 
-wp=sorted(wp,key=lambda x: x[1])
-
-print wp
 # print probc("2moro","tomorrow",d)
 # for i in range(ord('a'),ord('z')):
 # 	print chr(i),probc(chr(i),chr(i),d)
