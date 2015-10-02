@@ -3,6 +3,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 from nltk.stem.wordnet import WordNetLemmatizer
 import numpy as np
 from sklearn import svm
+from sklearn.ensemble import RandomForestClassifier
 import lda
 #import lda.datasets
 import re
@@ -43,6 +44,7 @@ for fn in file_names:
             docsObj[fn] += [(tmp,fn)]
             tmp = ""
             cnt = 0
+    jf.close()
 """ File reading done """
 print len(docs)
 docs1 = docsObj['sports.txt']
@@ -59,7 +61,13 @@ removelist = "=& "  # for non-alpha numeric chars that are allowed
 msgCount = 0
 doc_freq_dic = []
 vocab = defaultdict(int)
-stop = stopwords.words('english')
+#stop = stopwords.words('english')
+
+f = open('stopwords.txt','r')
+stop = [l.strip() for l in f]
+f.close()
+
+
 for msgSet in docs:
     msgSet = msgSet[0]
     msgSet= re.sub(r'[^\w'+removelist+']', '',msgSet).lower()
@@ -102,7 +110,7 @@ test_y = ldaInput[3000:6000,-1]
 # print test_y[0]
 print train_x.shape,train_y.shape,test_x.shape,test_y.shape
 
-clf = svm.NuSVC()
+clf = RandomForestClassifier(n_estimators=20, max_depth=None,min_samples_split=2, random_state=1)
 clf.fit(train_x,train_y)
 
 ans_y = clf.predict(test_x)

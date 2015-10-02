@@ -5,7 +5,7 @@ from nltk.corpus import stopwords
 from nltk.corpus import words
 from nltk import word_tokenize
 
-con=mdb.connect('localhost','root','mandava','sms')
+con=mdb.connect('localhost','root','raviny1953','sms')
 cur=con.cursor()
 
 def permute(p,l,m,r=None):
