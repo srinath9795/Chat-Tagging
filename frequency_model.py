@@ -29,11 +29,9 @@ print len(top_words_dict)
 
 cnt = 0
 tmp = ""
-while True:
-	cnt+=1
-	tmp += raw_input()+" "
-	if cnt<5:
-		continue
+
+def getTag(msg):
+	
 	msg = tmp
 	removelist = "=& "
 	msg = re.sub(r'[^\w'+removelist+']', '',msg).lower()
@@ -74,9 +72,9 @@ while True:
 			sub_tag = max(freq_dic.iteritems(), key=operator.itemgetter(1))[0]
 			print freq_dic,freq_dic_ind
 			print tag, sub_tag
-		print tag
 	cnt = 0
 	tmp = ""
+	return tag
 	
 	
 

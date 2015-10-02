@@ -4,9 +4,16 @@ import time
 from nltk.corpus import stopwords
 from nltk.corpus import words
 from nltk import word_tokenize
+import flask
+from flask import request,Flask
 
-con=mdb.connect('localhost','root','raviny1953','sms')
+con=mdb.connect('localhost','12CS10037','btech12','12CS10037')
 cur=con.cursor()
+
+
+
+app=Flask(__name__)
+
 
 def permute(p,l,m,r=None):
 	r=[] if r is None else r
@@ -136,12 +143,15 @@ stop=stopwords.words('english')
 
 def normalize(sms):
 	tokens = word_tokenize(sms)
-	# print tokens
+	print tokens
 	translated = []
 	for token in tokens:
 		if token in translationMap:
+			print 'already present in map',token,translationMap[token]
 			translated.append(translationMap[token])
 		elif token in englishVocab:
+			print 'already present in vocab'
+
 			translated.append(token)
 		else:
 			wp=list()
@@ -149,10 +159,10 @@ def normalize(sms):
 				r=probw(token,word,d)
 				wp.append((word,r))
 			wp=sorted(wp,key=lambda x: x[1])
+			print 'norm done',token,wp[-1][0]
+
 			translated.append(wp[-1][0])
 	return ' '.join(translated)
-print 'asd'
-print normalize(raw_input())
 
 
 # print probc("2moro","tomorrow",d)
@@ -173,3 +183,19 @@ print normalize(raw_input())
 # print "d['to']",d['to']
 # print "d['$to']",d['$to'],d['t']
 # print d['morro']
+
+
+
+@app.route('/norm',methods=['POST'])
+def giveans():
+	strings=request.data
+	jsonobj=json.loads(strings)
+	print jsonobj
+	print strings
+
+@app.route('/')
+def response():
+	return 'working'
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0',port=10000,debug=True)
