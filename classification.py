@@ -110,7 +110,8 @@ test_y = ldaInput[3000:6000,-1]
 # print test_y[0]
 print train_x.shape,train_y.shape,test_x.shape,test_y.shape
 
-clf = RandomForestClassifier(n_estimators=20, max_depth=None,min_samples_split=2, random_state=1)
+# clf = RandomForestClassifier(n_estimators=20, max_depth=None,min_samples_split=2, random_state=1)
+clf = svm.SVC()
 clf.fit(train_x,train_y)
 
 ans_y = clf.predict(test_x)
