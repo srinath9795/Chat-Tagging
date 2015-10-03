@@ -8,6 +8,17 @@ stops = [l.strip() for l in f]
 f.close()
 
 file_names = ['sports','technology','movies','music','politics','programming']
+norm_files = {
+
+'technology':641558,
+'sports':570011,
+'movies':486509,
+'music':511676,
+'politics':784324,
+'programming':832118
+        
+        }
+
 sub_cats = {}
 sub_cats['sports'] = ['nba','soccer']
 
@@ -31,8 +42,6 @@ cnt = 0
 tmp = ""
 
 def getTag(msg):
-	
-	msg = tmp
 	removelist = "=& "
 	msg = re.sub(r'[^\w'+removelist+']', '',msg).lower()
 	lmtzr = WordNetLemmatizer()
@@ -50,12 +59,16 @@ def getTag(msg):
 					freq_dic[topic] += top_words_dict[topic][word]
 					freq_dic_ind[topic] += [(word,top_words_dict[topic][word])]
 			
-	print freq_dic
+	for topic in freq_dic:
+	    print topic,freq_dic[topic],float(freq_dic[topic])/norm_files[topic]
+	    freq_dic[topic] = float(freq_dic[topic])/norm_files[topic]
+	#print freq_dic
 	
 	if len(freq_dic)==0:
-		print "None"
+		return "None"
 	else:
 		tag = max(freq_dic.iteritems(), key=operator.itemgetter(1))[0]
+		"""
 		if tag == "sports":
 			freq_dic = {}
 			freq_dic_ind = {}
@@ -72,9 +85,12 @@ def getTag(msg):
 			sub_tag = max(freq_dic.iteritems(), key=operator.itemgetter(1))[0]
 			print freq_dic,freq_dic_ind
 			print tag, sub_tag
+		    """
 	cnt = 0
 	tmp = ""
 	return tag
 	
+while True:
+    print getTag(raw_input())
 	
 
