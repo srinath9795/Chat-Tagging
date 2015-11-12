@@ -1,4 +1,5 @@
 import re
+import math
 import operator
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk import word_tokenize
@@ -37,6 +38,12 @@ for fn in sub_cats['sports']:
 	f.close()
 
 print top_words_dict.keys()
+
+total_freq=0
+
+for x in norm_files:
+    total_freq+=norm_files[x]
+
 
 cnt = 0
 tmp = ""
@@ -93,8 +100,72 @@ def getTag(msg):
 	tmp = ""
 	return tag
 
+def getTagNew(msg):
+	tag = ""
+	# msg = tmp
+	removelist = "=& "
+	msg = re.sub(r'[^\w'+removelist+']', '',msg).lower()
+	lmtzr = WordNetLemmatizer()
+    	words = map(lmtzr.lemmatize,msg.split())
+	freq_dic = {}
+	freq_dic_ind = {}
+
+        score_dic = {}
+        for topic in file_names:
+            freq_dic[topic] = 0
+            score_dic[topic] = 0
+            freq_dic_ind[topic] = []
+
+	for word in words:
+		if word not in stops:
+                        total_word_freq = 0
+			for topic in file_names:
+				if word in top_words_dict[topic]:
+					total_word_freq += top_words_dict[topic][word]
+			for topic in file_names:
+				if word in top_words_dict[topic]:
+                                        pr=float(top_words_dict[topic][word])/norm_files[topic]
+                                        pc=float(total_word_freq)/total_freq
+                                        score_dic[topic]=pr*math.log(pr/pc)
+					freq_dic[topic] += top_words_dict[topic][word]
+					freq_dic_ind[topic] += [(word,top_words_dict[topic][word])]
+	
+	for topic in freq_dic:		
+		print topic,freq_dic_ind[topic],freq_dic[topic],float(freq_dic[topic])/norm_files[topic],score_dic[topic]*10000000
+		freq_dic[topic] = float(freq_dic[topic])/norm_files[topic]
+#print freq_dic
+	
+	if len(score_dic)==0:
+		print  "None"
+		return ''
+	else:
+		tag = max(score_dic.iteritems(), key=operator.itemgetter(1))[0]
+		"""
+		if tag == "sports":
+			freq_dic = {}
+			freq_dic_ind = {}
+			for word in words:
+				if word not in stops:
+					for topic in sub_cats['sports']:
+						if word in top_words_dict[topic]:
+							if topic not in freq_dic:
+								freq_dic[topic] = 0
+								freq_dic_ind[topic] = []
+							
+							freq_dic[topic] += top_words_dict[topic][word]
+							freq_dic_ind[topic] += [(word,top_words_dict[topic][word])]
+			sub_tag = max(freq_dic.iteritems(), key=operator.itemgetter(1))[0]
+			print freq_dic,freq_dic_ind
+			print tag, sub_tag
+		    """
+	cnt = 0
+	tmp = ""
+	return tag
+
+
+
 print 'Enter Input'	
-# print getTag(raw_input())
+print getTagNew(raw_input())
 '''
 test_data = []
 msg = ""
