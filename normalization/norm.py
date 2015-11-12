@@ -1,18 +1,18 @@
 from collections import defaultdict
 import MySQLdb as mdb
-import time
+# import time
 from nltk.corpus import stopwords
 from nltk.corpus import words
 from nltk import word_tokenize
-import flask
-from flask import request,Flask
-import json
-con=mdb.connect('localhost','root','raviny1953','sms')
+# import flask
+# from flask import request,Flask
+# import json
+con=mdb.connect('localhost','root','mandava','sms')
 cur=con.cursor()
 
 
 
-app=Flask(__name__)
+# app=Flask(__name__)
 
 
 def permute(p,l,m,r=None):

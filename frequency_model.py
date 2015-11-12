@@ -167,6 +167,7 @@ def getTagNew(msg):
 print 'Enter Input'	
 print getTagNew(raw_input())
 '''
+confusionMatrix = {}
 test_data = []
 msg = ""
 file_names = ['sports','technology','movies','music','politics','programming']
@@ -174,11 +175,15 @@ TP={}
 TN={}
 FP={}
 FN={}
+obj = {}
+for fn in file_names:
+	obj[fn] = 0	
 for fn in file_names:
 	TP[fn] = 0
 	TN[fn] = 0
 	FP[fn] = 0
 	FN[fn] = 0
+	confusionMatrix[fn] = copy.deepcopy(obj)
 for fn in file_names:
 	f = open('reddit_test_data/'+fn,'r')
 	count = 0
@@ -190,6 +195,7 @@ for fn in file_names:
 			count=0
 			
 			pTag = getTag(msg)
+			confusionMatrix[fn][pTag]+=1
 			if pTag == fn:
 				TP[fn]+=1
 			elif pTag!='':
@@ -206,4 +212,5 @@ for fn in file_names:
 print TP
 print FP
 print FN
+print confusionMatrix
 '''
