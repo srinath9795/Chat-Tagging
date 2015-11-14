@@ -7,7 +7,7 @@ from nltk import word_tokenize
 import flask
 from flask import request,Flask
 import json
-con=mdb.connect('localhost','root','raviny1953','sms')
+con=mdb.connect('localhost','root','pass','sms')
 cur=con.cursor()
 
 

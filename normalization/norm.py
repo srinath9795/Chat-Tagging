@@ -1,16 +1,23 @@
 from collections import defaultdict
 import MySQLdb as mdb
-# import time
+import nltk
 from nltk.corpus import stopwords
 from nltk.corpus import words
 from nltk import word_tokenize
+import enchant
+
 # import flask
 # from flask import request,Flask
 # import json
-con=mdb.connect('localhost','root','mandava','sms')
+
+from nltk.corpus import brown
+
+con=mdb.connect('localhost','root','pass','sms')
 cur=con.cursor()
 
+cfreq_brown_2gram = nltk.ConditionalFreqDist(nltk.bigrams(brown.words()))
 
+english_dictionary = enchant.Dict("en_US")
 
 # app=Flask(__name__)
 
@@ -145,23 +152,34 @@ def normalize(sms):
 	tokens = word_tokenize(sms)
 	print tokens
 	translated = []
+	i=0
 	for token in tokens:
 		if token in translationMap:
-#			print 'already present in map',token,translationMap[token]
+			print 'already present in map',token,translationMap[token]
 			translated.append(translationMap[token])
-		elif token in englishVocab:
-#			print 'already present in vocab'
+		elif english_dictionary.check(token):
+			print 'already present in vocab'
 
 			translated.append(token)
 		else:
 			wp=list()
-			for word in vocab:
-				r=probw(token,word,d)
-				wp.append((word,r))
+			if i==0:
+				for word in vocab:
+					r=probw(token,word,d)
+					wp.append((word,r))
+			else:
+				
+				for word in cfreq_brown_2gram[ptoken]:
+					print 'checking '+ ptoken+ ' for ',word	
+					r=probw(token,word,d)
+					wp.append((word,r))
+
 			wp=sorted(wp,key=lambda x: x[1])
 			#print 'norm done',token,wp[-1][0]
 
 			translated.append(wp[-1][0])
+		i+=1
+		ptoken=translated[-1]
 	return ' '.join(translated)
 
 
@@ -184,6 +202,7 @@ def normalize(sms):
 # print "d['$to']",d['$to'],d['t']
 # print d['morro']
 
+print 'ready'
 while True:
 	print normalize(raw_input())
 
