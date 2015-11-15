@@ -93,7 +93,7 @@ def getTag(msg):
 					freq_dic_ind[topic] += [(word,top_words_dict[topic][word])]
 	
 	for topic in freq_dic:		
-		# print topic,freq_dic_ind[topic],freq_dic[topic],float(freq_dic[topic])/norm_files[topic]
+		print topic,freq_dic_ind[topic],freq_dic[topic],float(freq_dic[topic])/norm_files[topic]
 		freq_dic[topic] = float(freq_dic[topic])/norm_files[topic]
 #print freq_dic
 	
@@ -102,7 +102,7 @@ def getTag(msg):
 		return ''
 	else:
 		tag = max(freq_dic.iteritems(), key=operator.itemgetter(1))[0]
-		"""
+		
 		if tag == "sports":
 			freq_dic = {}
 			freq_dic_ind = {}
@@ -116,10 +116,15 @@ def getTag(msg):
 							
 							freq_dic[topic] += top_words_dict[topic][word]
 							freq_dic_ind[topic] += [(word,top_words_dict[topic][word])]
+			for topic in freq_dic:		
+				freq_dic[topic] = float(freq_dic[topic])/norm_files_sports[topic]
 			sub_tag = max(freq_dic.iteritems(), key=operator.itemgetter(1))[0]
 			print freq_dic,freq_dic_ind
-			print tag, sub_tag
-		    """
+			if len(freq_dic)==0:
+				print  "None"
+				return tag
+			# print tag, sub_tag
+			return sub_tag
 	cnt = 0
 	tmp = ""
 	return tag
@@ -158,7 +163,7 @@ def getTagNew(msg):
 					freq_dic_ind[topic] += [(word,top_words_dict[topic][word])]
 	
 	for topic in freq_dic:		
-		# print topic,freq_dic_ind[topic],freq_dic[topic],float(freq_dic[topic])/norm_files[topic],score_dic[topic]*10000000
+		print topic,freq_dic_ind[topic],freq_dic[topic],float(freq_dic[topic])/norm_files[topic],score_dic[topic]*10000000
 		freq_dic[topic] = float(freq_dic[topic])/norm_files[topic]
 #print freq_dic
 	allZero = True
@@ -191,7 +196,7 @@ def getTagNew(msg):
 					
 					for topic in sub_cats['sports']:
 						if word in top_words_dict[topic]:
-							# print (word,topic,top_words_dict[topic][word])
+							print (word,topic,top_words_dict[topic][word])
                                                         pr=float(top_words_dict[topic][word])/norm_files_sports[topic]
                                                         pc=float(total_word_freq)/(total_freq)
                                                         
@@ -312,7 +317,7 @@ def getTagNew2(msg):
 
 def take_input():
     print 'Enter Input'	
-    print getTagNew2(raw_input())
+    print getTag(raw_input())
     # print getTagNew(raw_input())
 
 def calc_metrics():
@@ -341,20 +346,23 @@ def calc_metrics():
             		continue
                 count=count+1
                 msg=msg+line
-                if(count==10):
+                if(count==5):
                         test_data.append((msg,fn))
                         count=0
                         
-                        pTag = getTagNew2(msg)
+                        pTag = getTag(msg)
                         if pTag!='':
                             confusionMatrix[fn][pTag]+=1
                         if pTag == fn:
                                 TP[fn]+=1
                         elif pTag!='':
-                                # print msg,fn,pTag
-                                # print "==============================	"
-                                FP[pTag]+=1			
-                                FN[fn]+=1			
+                        	if pTag!=fn and fn!="sports":
+                        		print msg,fn,pTag
+                        		print "==============================	"
+                           	FP[pTag]+=1
+                           	FN[fn]+=1
+                        # if fn=="technology" and pTag=="politics":
+                        # 	print msg			
                         msg=""
             f.close()
     for fn in file_names:
@@ -370,7 +378,7 @@ def calc_metrics():
 
 if __name__ == '__main__':
     #print(norm_files)
-    calc_metrics()
-    # take_input()
+    # calc_metrics()
+    take_input() 
 
     

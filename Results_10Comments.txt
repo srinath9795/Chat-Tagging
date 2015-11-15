@@ -175,3 +175,44 @@ Precision:  0.682254196643
 {'cricket': 78, 'baseball': 521, 'tennis': 265, 'programming': 187, 'sports': 0, 'movies': 172, 'music': 183, 'politics': 249, 'nba': 346, 'soccer': 213, 'technology': 59}
 {'cricket': 227, 'baseball': 160, 'tennis': 70, 'programming': 96, 'sports': 682, 'movies': 76, 'music': 73, 'politics': 43, 'nba': 162, 'soccer': 240, 'technology': 444}
 {'cricket': {'cricket': 429, 'tennis': 53, 'programming': 8, 'sports': 0, 'movies': 23, 'baseball': 66, 'politics': 8, 'music': 29, 'nba': 17, 'soccer': 15, 'technology': 8}, 'baseball': {'cricket': 17, 'tennis': 16, 'programming': 1, 'sports': 0, 'movies': 13, 'baseball': 566, 'politics': 6, 'music': 10, 'nba': 83, 'soccer': 14, 'technology': 0}, 'tennis': {'cricket': 3, 'tennis': 569, 'programming': 8, 'sports': 0, 'movies': 13, 'baseball': 12, 'politics': 7, 'music': 15, 'nba': 4, 'soccer': 7, 'technology': 1}, 'programming': {'cricket': 3, 'tennis': 2, 'programming': 901, 'sports': 0, 'movies': 12, 'baseball': 5, 'politics': 23, 'music': 14, 'nba': 4, 'soccer': 1, 'technology': 32}, 'sports': {'cricket': 26, 'tennis': 110, 'programming': 2, 'sports': 0, 'movies': 5, 'baseball': 217, 'politics': 7, 'music': 5, 'nba': 165, 'soccer': 143, 'technology': 2}, 'movies': {'cricket': 2, 'tennis': 0, 'programming': 8, 'sports': 0, 'movies': 589, 'baseball': 7, 'politics': 24, 'music': 23, 'nba': 4, 'soccer': 2, 'technology': 6}, 'music': {'cricket': 3, 'tennis': 2, 'programming': 6, 'sports': 0, 'movies': 20, 'baseball': 4, 'politics': 33, 'music': 692, 'nba': 2, 'soccer': 0, 'technology': 3}, 'politics': {'cricket': 1, 'tennis': 4, 'programming': 6, 'sports': 0, 'movies': 15, 'baseball': 3, 'politics': 824, 'music': 3, 'nba': 0, 'soccer': 7, 'technology': 4}, 'nba': {'cricket': 3, 'tennis': 21, 'programming': 2, 'sports': 0, 'movies': 7, 'baseball': 109, 'politics': 2, 'music': 5, 'nba': 531, 'soccer': 13, 'technology': 0}, 'soccer': {'cricket': 17, 'tennis': 47, 'programming': 5, 'sports': 0, 'movies': 8, 'baseball': 75, 'politics': 8, 'music': 22, 'nba': 55, 'soccer': 428, 'technology': 3}, 'technology': {'cricket': 3, 'tennis': 10, 'programming': 141, 'sports': 0, 'movies': 56, 'baseball': 23, 'politics': 131, 'music': 57, 'nba': 12, 'soccer': 11, 'technology': 278}}
+
+
+
+For frequency based approach:
+
+---- for  sports
+Recall:  0.0
+---- for  technology
+Recall:  0.501385041551
+Precision:  0.72255489022
+---- for  movies
+Recall:  0.887218045113
+Precision:  0.686845168801
+---- for  music
+Recall:  0.879738562092
+Precision:  0.748609566185
+---- for  politics
+Recall:  0.933102652826
+Precision:  0.693825042882
+---- for  programming
+Recall:  0.792377131394
+Precision:  0.880713489409
+---- for  nba
+Recall:  0.886002886003
+Precision:  0.727488151659
+---- for  soccer
+Recall:  0.806886227545
+Precision:  0.777777777778
+---- for  baseball
+Recall:  0.84435261708
+Precision:  0.60157016683
+---- for  cricket
+Recall:  0.727134146341
+Precision:  0.942687747036
+---- for  tennis
+Recall:  0.856025039124
+Precision:  0.78591954023
+{'cricket': 477, 'baseball': 613, 'tennis': 547, 'programming': 790, 'sports': 0, 'movies': 590, 'music': 673, 'politics': 809, 'nba': 614, 'soccer': 539, 'technology': 362}
+{'cricket': 29, 'baseball': 406, 'tennis': 149, 'programming': 107, 'sports': 0, 'movies': 269, 'music': 226, 'politics': 357, 'nba': 230, 'soccer': 154, 'technology': 139}
+{'cricket': 179, 'baseball': 113, 'tennis': 92, 'programming': 207, 'sports': 682, 'movies': 75, 'music': 92, 'politics': 58, 'nba': 79, 'soccer': 129, 'technology': 360}
+{'cricket': {'cricket': 477, 'tennis': 17, 'programming': 6, 'sports': 0, 'movies': 44, 'baseball': 41, 'politics': 15, 'music': 31, 'nba': 13, 'soccer': 7, 'technology': 5}, 'baseball': {'cricket': 4, 'tennis': 6, 'programming': 1, 'sports': 0, 'movies': 24, 'baseball': 613, 'politics': 10, 'music': 23, 'nba': 35, 'soccer': 7, 'technology': 3}, 'tennis': {'cricket': 1, 'tennis': 547, 'programming': 2, 'sports': 0, 'movies': 25, 'baseball': 4, 'politics': 24, 'music': 22, 'nba': 2, 'soccer': 3, 'technology': 9}, 'programming': {'cricket': 1, 'tennis': 3, 'programming': 790, 'sports': 0, 'movies': 26, 'baseball': 7, 'politics': 53, 'music': 25, 'nba': 6, 'soccer': 2, 'technology': 84}, 'sports': {'cricket': 11, 'tennis': 92, 'programming': 1, 'sports': 0, 'movies': 23, 'baseball': 247, 'politics': 16, 'music': 15, 'nba': 152, 'soccer': 121, 'technology': 4}, 'movies': {'cricket': 1, 'tennis': 3, 'programming': 4, 'sports': 0, 'movies': 590, 'baseball': 8, 'politics': 35, 'music': 17, 'nba': 1, 'soccer': 2, 'technology': 4}, 'music': {'cricket': 3, 'tennis': 5, 'programming': 1, 'sports': 0, 'movies': 28, 'baseball': 4, 'politics': 43, 'music': 673, 'nba': 1, 'soccer': 0, 'technology': 7}, 'politics': {'cricket': 0, 'tennis': 2, 'programming': 2, 'sports': 0, 'movies': 28, 'baseball': 4, 'politics': 809, 'music': 5, 'nba': 0, 'soccer': 4, 'technology': 13}, 'nba': {'cricket': 1, 'tennis': 7, 'programming': 2, 'sports': 0, 'movies': 10, 'baseball': 41, 'politics': 6, 'music': 8, 'nba': 614, 'soccer': 4, 'technology': 0}, 'soccer': {'cricket': 4, 'tennis': 10, 'programming': 3, 'sports': 0, 'movies': 19, 'baseball': 30, 'politics': 13, 'music': 22, 'nba': 18, 'soccer': 539, 'technology': 10}, 'technology': {'cricket': 3, 'tennis': 4, 'programming': 85, 'sports': 0, 'movies': 42, 'baseball': 20, 'politics': 142, 'music': 58, 'nba': 2, 'soccer': 4, 'technology': 362}}
