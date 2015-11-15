@@ -13,7 +13,7 @@ import string
 
 from nltk.corpus import brown
 
-con=mdb.connect('localhost','root','pass','sms')
+con=mdb.connect('localhost','root','mandava','sms')
 cur=con.cursor()
 
 cfreq_brown_2gram = nltk.ConditionalFreqDist(nltk.bigrams(brown.words()))
@@ -22,7 +22,7 @@ english_dictionary = enchant.Dict("en_US")
 
 # app=Flask(__name__)
 
-
+print type(cfreq_brown_2gram)
 def permute(p,l,m,r=None):
 	r=[] if r is None else r
 	if l==[]:

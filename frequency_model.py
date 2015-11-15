@@ -27,6 +27,17 @@ norm_files_sports = {}
 sub_cats = {}
 sub_cats['sports'] = ['nba','soccer','baseball','cricket','tennis']
 
+'''
+file_name implies the category
+
+top_word_dict[file_name][word] = <count>
+norm_files[file_name] = <summation of all the word frequencies in that topic>
+total_freq <== summation of all the word frequencies in all topics
+
+For a given text:
+freq_dic[file_name] = <summation of weights(frequencies) of the words present in the given text >
+freq_dic_ind[file_name][word] = <frequency of that word>
+'''
 top_words_dict = {}
 
 for fn in file_names:
@@ -49,7 +60,7 @@ for fn in sub_cats['sports']:
 
 #print top_words_dict.keys()
 
-total_freq=0
+total_freq=0 
 
 for x in norm_files:
     total_freq+=norm_files[x]
@@ -63,8 +74,11 @@ def getTag(msg):
 	# msg = tmp
 	removelist = "=& "
 	msg = re.sub(r'[^\w'+removelist+']', '',msg).lower()
+	tokens=msg.split()
+	# msg=msg.lower()
+	# tokens = word_tokenize(msg.decode('utf-8').lower())
 	lmtzr = WordNetLemmatizer()
-    	words = map(lmtzr.lemmatize,msg.split())
+   	words = map(lmtzr.lemmatize,tokens)
 	freq_dic = {}
 	freq_dic_ind = {}
 	for word in words:
@@ -79,7 +93,7 @@ def getTag(msg):
 					freq_dic_ind[topic] += [(word,top_words_dict[topic][word])]
 	
 	for topic in freq_dic:		
-		print topic,freq_dic_ind[topic],freq_dic[topic],float(freq_dic[topic])/norm_files[topic]
+		# print topic,freq_dic_ind[topic],freq_dic[topic],float(freq_dic[topic])/norm_files[topic]
 		freq_dic[topic] = float(freq_dic[topic])/norm_files[topic]
 #print freq_dic
 	
@@ -115,20 +129,23 @@ def getTagNew(msg):
 	# msg = tmp
 	removelist = "=& "
 	msg = re.sub(r'[^\w'+removelist+']', '',msg).lower()
+	tokens = msg.split()
+	# tokens = word_tokenize(msg.lower().decode('utf-8'))
+
 	lmtzr = WordNetLemmatizer()
-    	words = map(lmtzr.lemmatize,msg.split())
+   	words = map(lmtzr.lemmatize,tokens)
 	freq_dic = {}
 	freq_dic_ind = {}
 
-        score_dic = {}
-        for topic in file_names:
-            freq_dic[topic] = 0
-            score_dic[topic] = 0
-            freq_dic_ind[topic] = []
+	score_dic = {}
+	for topic in file_names:
+	    freq_dic[topic] = 0
+	    score_dic[topic] = 0
+	    freq_dic_ind[topic] = []
 
 	for word in words:
 		if word not in stops:
-                        total_word_freq = 0
+			total_word_freq = 0
 			for topic in file_names:
 				if word in top_words_dict[topic]:
 					total_word_freq += top_words_dict[topic][word]
@@ -141,33 +158,58 @@ def getTagNew(msg):
 					freq_dic_ind[topic] += [(word,top_words_dict[topic][word])]
 	
 	for topic in freq_dic:		
-		print topic,freq_dic_ind[topic],freq_dic[topic],float(freq_dic[topic])/norm_files[topic],score_dic[topic]*10000000
+		# print topic,freq_dic_ind[topic],freq_dic[topic],float(freq_dic[topic])/norm_files[topic],score_dic[topic]*10000000
 		freq_dic[topic] = float(freq_dic[topic])/norm_files[topic]
 #print freq_dic
-	
-	if len(score_dic)==0:
+	allZero = True
+	for key in score_dic:
+		if score_dic[key]!=0:
+			allZero = False
+			break
+	if allZero:
 		print  "None"
 		return ''
 	else:
 		tag = max(score_dic.iteritems(), key=operator.itemgetter(1))[0]
-		"""
+		
 		if tag == "sports":
+			score_dic = {}
 			freq_dic = {}
 			freq_dic_ind = {}
+
+                        for topic in sub_cats['sports']:
+                            score_dic[topic] = 0
+                            freq_dic[topic] = 0
+                            freq_dic_ind[topic] = []
+
 			for word in words:
 				if word not in stops:
+					total_word_freq = 0
 					for topic in sub_cats['sports']:
 						if word in top_words_dict[topic]:
-							if topic not in freq_dic:
-								freq_dic[topic] = 0
-								freq_dic_ind[topic] = []
-							
-							freq_dic[topic] += top_words_dict[topic][word]
-							freq_dic_ind[topic] += [(word,top_words_dict[topic][word])]
-			sub_tag = max(freq_dic.iteritems(), key=operator.itemgetter(1))[0]
-			print freq_dic,freq_dic_ind
-			print tag, sub_tag
-		    """
+							total_word_freq += top_words_dict[topic][word]
+					
+					for topic in sub_cats['sports']:
+						if word in top_words_dict[topic]:
+							# print (word,topic,top_words_dict[topic][word])
+                                                        pr=float(top_words_dict[topic][word])/norm_files_sports[topic]
+                                                        pc=float(total_word_freq)/(total_freq)
+                                                        
+                                                        score_dic[topic]+=pr*math.log(pr/pc)
+                                                        freq_dic[topic] += top_words_dict[topic][word]
+                                                        freq_dic_ind[topic] += [(word,top_words_dict[topic][word])]
+
+			sub_tag = max(score_dic.iteritems(), key=operator.itemgetter(1))[0]
+			# print score_dic
+			# print tag, sub_tag
+			allZero = True
+			for key in score_dic:
+				if score_dic[key]!=0:
+					allZero = False
+					break
+			if allZero:
+				return tag
+			return sub_tag
 	cnt = 0
 	tmp = ""
 	return tag
@@ -178,8 +220,11 @@ def getTagNew2(msg):
 	# msg = tmp
 	removelist = "=& "
 	msg = re.sub(r'[^\w'+removelist+']', '',msg).lower()
+	tokens = msg.split()
+
+	# tokens = word_tokenize(msg.decode('utf-8').lower())
 	lmtzr = WordNetLemmatizer()
-    	words = map(lmtzr.lemmatize,msg.split())
+   	words = map(lmtzr.lemmatize,tokens)
 	freq_dic = {}
 	freq_dic_ind = {}
 
@@ -197,28 +242,32 @@ def getTagNew2(msg):
 					total_word_freq += top_words_dict[topic][word]
 			for topic in file_names:
 				if word in top_words_dict[topic]:
-                                        print(word,topic,top_words_dict[topic][word])
+                                        # print(word,topic,top_words_dict[topic][word])
                                         pr=float(top_words_dict[topic][word])/norm_files[topic]
                                         pc=float(total_word_freq-top_words_dict[topic][word])/(total_freq-norm_files[topic])
                                         if(pc==0):
-                                            pc=0.000000000000001
+                                            pc=0.0000000001
                                         score_dic[topic]+=pr*math.log(pr/pc)
 					freq_dic[topic] += top_words_dict[topic][word]
 					freq_dic_ind[topic] += [(word,top_words_dict[topic][word])]
 	
 	for topic in freq_dic:		
 		#print topic,freq_dic_ind[topic],freq_dic[topic],float(freq_dic[topic])/norm_files[topic],score_dic[topic]*10000000
-		print topic, score_dic[topic]*10000000
+		# print topic, score_dic[topic]*10000000
 		freq_dic[topic] = float(freq_dic[topic])/norm_files[topic]
 #print freq_dic
-	
-	if len(score_dic)==0:
+	allZero = True
+	for key in score_dic:
+		if score_dic[key]!=0:
+			allZero = False
+			break
+	if allZero:
 		print  "None"
 		return ''
 	else:
 		tag = max(score_dic.iteritems(), key=operator.itemgetter(1))[0]
 		if tag == "sports":
-                        score_dic = {}
+			score_dic = {}
 			freq_dic = {}
 			freq_dic_ind = {}
 
@@ -229,19 +278,33 @@ def getTagNew2(msg):
 
 			for word in words:
 				if word not in stops:
+					total_word_freq = 0
 					for topic in sub_cats['sports']:
 						if word in top_words_dict[topic]:
-                                                        pr=float(top_words_dict[topic][word])/norm_files[topic]
-                                                        pc=float(total_word_freq-top_words_dict[topic][word])/(total_freq-norm_files[topic])
+							total_word_freq += top_words_dict[topic][word]
+					
+					for topic in sub_cats['sports']:
+						if word in top_words_dict[topic]:
+							# print (word,topic,top_words_dict[topic][word])
+                                                        pr=float(top_words_dict[topic][word])/norm_files_sports[topic]
+                                                        pc=float(total_word_freq-top_words_dict[topic][word])/(total_freq-norm_files_sports[topic])
                                                         if(pc==0):
-                                                            pc=0.000000000000001
+                                                            pc=0.01
                                                         score_dic[topic]+=pr*math.log(pr/pc)
                                                         freq_dic[topic] += top_words_dict[topic][word]
                                                         freq_dic_ind[topic] += [(word,top_words_dict[topic][word])]
 
 			sub_tag = max(score_dic.iteritems(), key=operator.itemgetter(1))[0]
-			print score_dic
-			print tag, sub_tag
+			# print score_dic
+			# print tag, sub_tag
+			allZero = True
+			for key in score_dic:
+				if score_dic[key]!=0:
+					allZero = False
+					break
+			if allZero:
+				return tag
+			return sub_tag
 	cnt = 0
 	tmp = ""
 	return tag
@@ -250,12 +313,13 @@ def getTagNew2(msg):
 def take_input():
     print 'Enter Input'	
     print getTagNew2(raw_input())
+    # print getTagNew(raw_input())
 
 def calc_metrics():
     confusionMatrix = {}
     test_data = []
     msg = ""
-    file_names = ['sports','technology','movies','music','politics','programming']
+    file_names = ['sports','technology','movies','music','politics','programming','nba','soccer','baseball','cricket','tennis']
     TP={}
     TN={}
     FP={}
@@ -270,31 +334,35 @@ def calc_metrics():
             FN[fn] = 0
             confusionMatrix[fn] = copy.deepcopy(obj)
     for fn in file_names:
-            f = open('reddit_test_data/'+fn,'r')
+            f = open('train_new/'+fn,'r')
             count = 0
             for line in f:
-                    count=count+1
-                    msg=msg+line
-                    if(count==10):
-                            test_data.append((msg,fn))
-                            count=0
-                            
-                            pTag = getTagNew2(msg)
-                            if pTag!='':
-                                confusionMatrix[fn][pTag]+=1
-                            if pTag == fn:
-                                    TP[fn]+=1
-                            elif pTag!='':
-                                    print msg,fn,pTag
-                                    print "==============================	"
-                                    FP[pTag]+=1			
-                                    FN[fn]+=1			
-                            msg=""
+            	if line=="" or line=="\n":
+            		continue
+                count=count+1
+                msg=msg+line
+                if(count==10):
+                        test_data.append((msg,fn))
+                        count=0
+                        
+                        pTag = getTagNew2(msg)
+                        if pTag!='':
+                            confusionMatrix[fn][pTag]+=1
+                        if pTag == fn:
+                                TP[fn]+=1
+                        elif pTag!='':
+                                # print msg,fn,pTag
+                                # print "==============================	"
+                                FP[pTag]+=1			
+                                FN[fn]+=1			
+                        msg=""
             f.close()
     for fn in file_names:
             print '---- for ',fn
-            print 'Recall: ',(1.0*TP[fn])/(TP[fn]+FN[fn])
-            print 'Precision: ',(1.0*TP[fn])/(TP[fn]+FP[fn])
+            if (TP[fn]+FN[fn])!=0:
+            	print 'Recall: ',(1.0*TP[fn])/(TP[fn]+FN[fn])
+            if (TP[fn]+FP[fn])!=0:
+            	print 'Precision: ',(1.0*TP[fn])/(TP[fn]+FP[fn])
     print TP
     print FP
     print FN
@@ -302,6 +370,7 @@ def calc_metrics():
 
 if __name__ == '__main__':
     #print(norm_files)
-    #calc_metrics()
-    take_input()
+    calc_metrics()
+    # take_input()
+
     
