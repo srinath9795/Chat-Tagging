@@ -7,13 +7,14 @@ from nltk import word_tokenize
 import enchant
 import threading
 import string
+from orderedset import OrderedSet
 # import flask
 # from flask import request,Flask
 # import json
 
 from nltk.corpus import brown
 
-con=mdb.connect('localhost','root','mandava','sms')
+con=mdb.connect('localhost','root','pass','sms')
 cur=con.cursor()
 
 cfreq_brown_2gram = nltk.ConditionalFreqDist(nltk.bigrams(brown.words()))
@@ -238,7 +239,8 @@ def normalize(sms):
 				
 			wp=sorted(wp,key=lambda x: x[1])
 			#print 'norm done',token,wp[-1][0]
-			print wp[-5:]
+			samw=OrderedSet([ii[0] for ii in wp[-5:]])
+			print token,'---',samw
 			translated.append(wp[-1][0])
 		i+=1
 		ptoken=translated[-1]
